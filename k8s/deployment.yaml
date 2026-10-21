@@ -1,0 +1,33 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cca2-todo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cca2-todo
+  template:
+    metadata:
+      labels:
+        app: cca2-todo
+    spec:
+      containers:
+        - name: cca2-todo
+          image: smit172006/cca2-todo:v1
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5000
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 3
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 10
+            periodSeconds: 10
