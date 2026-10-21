@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>My To-Do List</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <main class="container">
+    <header><span class="eyebrow">STAY ORGANIZED</span><h1>My To-Do List ✨</h1><p>Make today a productive day. One task at a time.</p></header>
+    <section class="panel">
+      <div class="stats"><div><strong>{{ total }}</strong><span>Total tasks</span></div><div><strong>{{ total - done }}</strong><span>Pending</span></div><div><strong>{{ done }}</strong><span>Completed</span></div></div>
+      <form class="add" method="post" action="{{ url_for('add') }}"><input name="title" maxlength="200" placeholder="What needs to be done?" aria-label="New task" required autofocus><button type="submit">+ Add Task</button></form>
+      <h2>Your Tasks</h2>
+      {% if tasks %}
+      <ul class="tasks">
+        {% for task in tasks %}
+        <li class="{{ 'completed' if task['completed'] else '' }}">
+          <form method="post" action="{{ url_for('toggle', task_id=task['id']) }}"><button class="check" type="submit" aria-label="Toggle completion">{{ '✓' if task['completed'] else '' }}</button></form>
+          <span class="task-title">{{ task['title'] }}</span>
+          <form method="post" action="{{ url_for('delete', task_id=task['id']) }}"><button class="delete" type="submit" aria-label="Delete task">✕</button></form>
+        </li>
+        {% endfor %}
+      </ul>
+      {% else %}<div class="empty">📝<p>No tasks yet. Add your first task above!</p></div>{% endif %}
+    </section>
+    <footer>Built with Flask · CCA 2 DevOps Project</footer>
+  </main>
+</body>
+</html>
